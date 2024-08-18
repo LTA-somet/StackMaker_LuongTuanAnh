@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -13,6 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject Stand;
     [SerializeField] GameObject WinUI;
 
+ //   private int StackHolderCount=0;
     private Vector3 aPoint = Vector3.zero;
     private Vector3 bPoint = Vector3.zero;
     private Vector3 dirVector = Vector3.zero;
@@ -26,68 +29,98 @@ public class Player : MonoBehaviour
         Vector3.forward,
     };
     public bool isWin = false;
-
+   
     void Update()
     {
-        if (!isMove) 
+        CheckMove();
+        CheckRayCast();     
+    }
+    private void CheckMove()
+    {
+        if (!isMove)
         {
             SetInput();
         }
 
-        if (isMove) 
+        if (isMove)
         {
             Move();
         }
-
+    }
+    private void CheckRayCast()
+    {
         Ray ray = new Ray(Stand.transform.position, transform.right);
         RaycastHit hitInfo;
 
         if (Physics.Raycast(ray, out hitInfo, maxDistance))
         {
+            float stackHeight = 1.0f;
             if (hitInfo.collider.tag == "Wall")
             {
                 StopMove();
-               // Debug.Log("wall");
+
             }
-
-            float stackHeight = 1.0f;
-
+           
             if (hitInfo.collider.tag == "Stack")
             {
-                //Debug.Log("stack");
-                Instantiate(stackPrefab, spawnPoint.position, Quaternion.Euler(-90, 0, 0), stackHolder);
-                spawnPoint.transform.position += new Vector3(0, stackHeight, 0);
-                anim.transform.position += new Vector3(0, stackHeight, 0);
-                ReturnToPool(hitInfo.collider.gameObject);
+                Stack(stackHeight,hitInfo);
+               
             }
 
             if (hitInfo.collider.tag == "Bridge")
             {
-                hitInfo.collider.GetComponent<MeshRenderer>().enabled = true;
-                hitInfo.collider.GetComponent<BoxCollider>().enabled = false;
-                if (stackHolder.childCount > 0)
-                {
-                    Transform topStack = stackHolder.GetChild(stackHolder.childCount - 1);
-                    Destroy(topStack.gameObject);
-                    spawnPoint.transform.position -= new Vector3(0, stackHeight, 0);
-                    anim.transform.position -= new Vector3(0, stackHeight, 0);
-                }
-                else
-                {
-                    StopMove();
-                }
+             Bridge(stackHeight,hitInfo);
             }
 
             if (hitInfo.collider.tag == "Winpos")
             {
-                Invoke(nameof(StopMove), 0.5f);
-                isWin = true;
+              StartCoroutine(  Winpos(stackHeight));
+                
             }
         }
-
         Debug.DrawRay(Stand.transform.position, transform.right * maxDistance, Color.red);
     }
+    private void Stack(float stackHeight, RaycastHit ray)
+    {
+        
+        Instantiate(stackPrefab, spawnPoint.position, Quaternion.Euler(-90, 0, 0), stackHolder);
+        spawnPoint.transform.position += new Vector3(0, stackHeight, 0);
+        anim.transform.position += new Vector3(0, stackHeight, 0);
+        ReturnToPool(ray.collider.gameObject);
 
+    }
+    private void Bridge(float stackHeight,RaycastHit ray)
+    {
+       
+        ray.collider.GetComponent<MeshRenderer>().enabled = true;
+        ray.collider.GetComponent<BoxCollider>().enabled = false;
+        if (stackHolder.childCount > 0)
+        {
+            Transform topStack = stackHolder.GetChild(stackHolder.childCount - 1);
+            Destroy(topStack.gameObject);
+            spawnPoint.transform.position -= new Vector3(0, stackHeight, 0);
+            anim.transform.position -= new Vector3(0, stackHeight, 0);
+        }
+        else
+        {
+            StopMove();
+        }
+    }
+    private IEnumerator Winpos(float stackHeight)
+    {
+        yield return new WaitForSeconds(0.5f);
+        isWin = true; 
+        StopMove();
+        stackHolder.gameObject.SetActive(false);
+        anim.position=Stand.transform.position;
+        
+    }
+    private void StopMove()
+    {
+        dirVector = Vector3.zero;
+        moveVector = Vector3.zero;
+        isMove = false;
+    }
     public void SetInput()
     {
         if (Input.GetMouseButtonDown(0))
@@ -128,7 +161,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (moveVector != Vector3.zero)
+        if (moveVector .magnitude>0.01f)
         {
             float angle = Mathf.Atan2(moveVector.z, moveVector.x) * Mathf.Rad2Deg;
             Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.down);
@@ -138,12 +171,7 @@ public class Player : MonoBehaviour
         transform.position += moveVector * speed * Time.deltaTime;
     }
 
-    private void StopMove()
-    {
-        dirVector = Vector3.zero;
-        moveVector = Vector3.zero;
-        isMove = false;
-    }
+   
 
     public void ReturnToPool(GameObject gameObject)
     {

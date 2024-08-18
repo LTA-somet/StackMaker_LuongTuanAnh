@@ -7,7 +7,7 @@ public class Anim : MonoBehaviour
     public static Anim anim;
     private void Awake()
     {
-        Instantiate(anim);
+      //  Instantiate(anim);
     }
     // Start is called before the first frame update
     void Start()

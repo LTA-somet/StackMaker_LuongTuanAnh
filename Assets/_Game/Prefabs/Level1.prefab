@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 838962301459798275}
-  offset: {x: 0, y: 12, z: -30}
+  offset: {x: 0, y: 10, z: -50}
   speed: 10
 --- !u!1 &5743703633547539868
 GameObject:
@@ -136,7 +136,7 @@ Transform:
   m_GameObject: {fileID: 5743703633547539868}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.22, z: 0}
+  m_LocalPosition: {x: 0, y: -0.3, z: 0}
   m_LocalScale: {x: 3, y: 0.2, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -336,6 +336,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 296b3a4be2004634688a3394c2680b6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wallPrefab: {fileID: 0}
+  brickPrefab: {fileID: 0}
+  unBrickPrefab: {fileID: 0}
+  winPrefab: {fileID: 0}
+  prefabHolder: {fileID: 0}
 --- !u!1 &7290875855084592783
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +463,7 @@ MonoBehaviour:
   stackHolder: {fileID: 4621653234194522893}
   Stand: {fileID: 5743703633547539868}
   WinUI: {fileID: 0}
+  isWin: 0
 --- !u!1 &9169251829643645960
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,13 +488,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9169251829643645960}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.0008726948, y: 0, z: 0, w: 0.99999964}
+  m_LocalPosition: {x: 0, y: -0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7646199792074518089}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.1, y: 0, z: 0}
 --- !u!1001 &22653851154533349
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2092,7 +2098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2580899147284204563, guid: c84b41a4245d5c241bc7ff57b0cca3f4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2580899147284204563, guid: c84b41a4245d5c241bc7ff57b0cca3f4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4517,18 +4523,6 @@ PrefabInstance:
     - target: {fileID: 1377060364527856, guid: bec8fbf23e70b4f42b574dddd6681a4c, type: 3}
       propertyPath: m_Name
       value: winpos
-      objectReference: {fileID: 0}
-    - target: {fileID: 4157892317022374, guid: bec8fbf23e70b4f42b574dddd6681a4c, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4157892317022374, guid: bec8fbf23e70b4f42b574dddd6681a4c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4157892317022374, guid: bec8fbf23e70b4f42b574dddd6681a4c, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4157892317022374, guid: bec8fbf23e70b4f42b574dddd6681a4c, type: 3}
       propertyPath: m_LocalPosition.x

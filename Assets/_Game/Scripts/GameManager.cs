@@ -9,10 +9,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     [SerializeField] private List<GameObject> LevelButtons = new List<GameObject>();
-    [SerializeField] private List<GameObject> Level = new List<GameObject>(); 
-   [SerializeField] private GameObject StartUI; 
-   [SerializeField] private GameObject LevelUI; 
-   [SerializeField] private GameObject WinUI; 
+    [SerializeField] private List<GameObject> Level = new List<GameObject>();
+    [SerializeField] private GameObject StartUI;
+    [SerializeField] private GameObject LevelUI;
+    [SerializeField] private GameObject WinUI;
+    [SerializeField] private GameObject EndUI;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Player Player;
     private int level;
@@ -24,14 +25,14 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); 
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
         LoadLevelStatus();
-      
+
     }
     private void Start()
     {
@@ -42,10 +43,10 @@ public class GameManager : MonoBehaviour
     {
         PlayWinUI();
     }
-  
+
     private void PlayWinUI()
     {
-        if (Player == null) { return; }   
+        if (Player == null) { return; }
         if (Player.isWin)
         {
             WinUI.gameObject.SetActive(true);
@@ -54,12 +55,12 @@ public class GameManager : MonoBehaviour
             Player.isWin = false;
         }
     }
-  
+
     private void UpdateLevelButtons()
     {
         for (int i = 0; i < LevelButtons.Count; i++)
         {
-            if (i == 0 || levelsCompleted[i - 1]) 
+            if (i == 0 || levelsCompleted[i - 1])
             {
                 LevelButtons[i].GetComponent<Button>().interactable = true;
             }
@@ -87,7 +88,7 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("LevelCompleted_" + i, levelsCompleted[i] ? 1 : 0);
         }
         PlayerPrefs.Save();
-        
+
     }
     public void Play()
     {
@@ -102,10 +103,11 @@ public class GameManager : MonoBehaviour
         {
             Destroy(currentLevel);
         }
-
-        currentLevel = Instantiate(Level[i]);
-        currentLevelIndex = i;
-        Player = FindObjectOfType<Player>();
+        
+            currentLevel = Instantiate(Level[i]);
+            currentLevelIndex = i;
+            Player = FindObjectOfType<Player>();
+        
     }
     public void ReplayLevel()
     {
@@ -114,11 +116,23 @@ public class GameManager : MonoBehaviour
     }
     public void NextLevel()
     {
-        CreateLevel(currentLevelIndex + 1);
+        if (currentLevelIndex < Level.Count-1)
+        {
+
+            CreateLevel(currentLevelIndex + 1);
+            WinUI.SetActive(false);
+        }
+        else {
         WinUI.SetActive(false);
+        EndUI.gameObject.SetActive(true);   
+        }
     }
     public void ResetLevel()
     {
         PlayerPrefs.DeleteAll();
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

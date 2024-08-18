@@ -23899,7 +23899,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3008072402209745873}
-  offset: {x: 0, y: 12, z: -30}
+  offset: {x: 0, y: 10, z: -50}
   speed: 10
 --- !u!1 &2039343034232863115
 GameObject:
@@ -58517,6 +58517,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 296b3a4be2004634688a3394c2680b6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wallPrefab: {fileID: 0}
+  brickPrefab: {fileID: 0}
+  unBrickPrefab: {fileID: 0}
+  winPrefab: {fileID: 0}
+  prefabHolder: {fileID: 0}
 --- !u!1 &5075830404646684096
 GameObject:
   m_ObjectHideFlags: 0
